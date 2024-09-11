@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.ui.Modifier
+import com.semonemo.presentation.screen.wallet.WalletScreen
 import com.semonemo.presentation.theme.SemonemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,12 +18,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             SemonemoTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
+                Scaffold(
+                    modifier = Modifier,
+                ) { innerPadding ->
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        WalletScreen()
+                    }
                 }
             }
         }
