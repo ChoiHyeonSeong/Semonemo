@@ -21,6 +21,7 @@ val Gray01 = Color(0xFF555555)
 val Gray02 = Color(0xFF949494)
 val Gray03 = Color(0xFFD9D9D9)
 val WhiteGray = Color(0xFFEEEEEE)
+val CiTest = Color(0xFF000000)
 val Main01 =
     Brush.linearGradient(
         colors =
