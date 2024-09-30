@@ -3,6 +3,7 @@ package com.semonemo.presentation.screen.frame
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.semonemo.domain.model.ApiResponse
@@ -91,5 +92,29 @@ class FrameViewModel
 
         fun updateContent(content: String) {
             _uiState.update { it.copy(content = content) }
+        }
+
+        fun addTag(tag: String) {
+            _uiState.update {
+                val newList =
+                    it.tags.toMutableStateList().apply {
+                        add(tag)
+                    }
+                it.copy(
+                    tags = newList,
+                )
+            }
+        }
+
+        fun deleteTag(tag: String) {
+            _uiState.update {
+                val newList =
+                    it.tags.filter { t ->
+                        t != tag
+                    }
+                it.copy(
+                    tags = newList,
+                )
+            }
         }
     }

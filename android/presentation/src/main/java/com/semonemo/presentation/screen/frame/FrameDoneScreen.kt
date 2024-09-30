@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -43,6 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.semonemo.presentation.R
 import com.semonemo.presentation.component.CustomTextField
+import com.semonemo.presentation.component.HashTag
+import com.semonemo.presentation.component.HashTagTextField
 import com.semonemo.presentation.component.LoadingDialog
 import com.semonemo.presentation.component.LongBlackButton
 import com.semonemo.presentation.component.ScriptTextField
@@ -72,6 +76,8 @@ fun FrameDoneRoute(
         onClick = viewModel::uploadImage,
         updateContent = viewModel::updateContent,
         updateTitle = viewModel::updateTitle,
+        addTags = viewModel::addTag,
+        deleteTags = viewModel::deleteTag,
     )
 }
 
@@ -85,6 +91,8 @@ fun FrameDoneContent(
     updateContent: (String) -> Unit = {},
     uiEvent: SharedFlow<FrameUiEvent>,
     onErrorSnackBar: (String) -> Unit = {},
+    addTags: (String) -> Unit = {},
+    deleteTags: (String) -> Unit = {},
 ) {
     LaunchedEffect(uiEvent) {
         uiEvent.collectLatest { event ->
@@ -101,6 +109,9 @@ fun FrameDoneContent(
         bitmap = uiState.bitmap,
         updateContent = updateContent,
         updateTitle = updateTitle,
+        tags = uiState.tags,
+        addTags = addTags,
+        deleteTags = deleteTags,
     )
     if (uiState.isLoading) {
         Box(
@@ -125,6 +136,9 @@ fun FrameDoneScreen(
     onClick: (File) -> Unit = {},
     updateTitle: (String) -> Unit = {},
     updateContent: (String) -> Unit = {},
+    tags: List<String> = listOf(),
+    addTags: (String) -> Unit = {},
+    deleteTags: (String) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
@@ -180,6 +194,30 @@ fun FrameDoneScreen(
                 )
             }
             Spacer(modifier = Modifier.height(35.dp))
+            HashTagTextField(
+                modifier = Modifier.fillMaxWidth(0.88f),
+                onTagAddAction = { keyword ->
+                    if (keyword.isNotBlank()) {
+                        addTags(keyword)
+                    }
+                },
+                focusManager = focusManager,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(0.88f),
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+                content = {
+                    items(count = tags.size) { index ->
+                        HashTag(
+                            keyword = tags[index],
+                            isEdit = true,
+                            onCloseClicked = { deleteTags(tags[index]) },
+                        )
+                    }
+                },
+            )
+            Spacer(modifier = Modifier.height(20.dp))
             CustomTextField(
                 modifier =
                     Modifier
@@ -230,6 +268,8 @@ fun FrameDoneScreen(
 @Composable
 fun FrameDoneScreenPreview() {
     SemonemoTheme {
-        FrameDoneScreen()
+        FrameDoneScreen(
+            tags = listOf("아이유", "이재한"),
+        )
     }
 }
