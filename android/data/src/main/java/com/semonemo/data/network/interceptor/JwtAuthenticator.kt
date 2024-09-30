@@ -1,9 +1,9 @@
 package com.semonemo.data.network.interceptor
 
-import com.semonemo.data.datasource.TokenDataSource
 import com.semonemo.data.exception.ApiException
 import com.semonemo.data.exception.RefreshTokenExpiredException
 import com.semonemo.data.network.api.AuthApi
+import com.semonemo.domain.datasource.TokenDataSource
 import com.semonemo.domain.model.JwtToken
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator

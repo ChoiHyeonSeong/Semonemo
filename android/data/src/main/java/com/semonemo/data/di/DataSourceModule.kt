@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.semonemo.data.R
-import com.semonemo.data.datasource.AuthDataSource
-import com.semonemo.data.datasource.TokenDataSource
+import com.semonemo.data.datasource.AuthDataSourceImpl
+import com.semonemo.data.datasource.TokenDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,9 +29,9 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideTokenDataSource(dataStore: DataStore<Preferences>): TokenDataSource = TokenDataSource(dataStore)
+    fun provideTokenDataSource(dataStore: DataStore<Preferences>): TokenDataSourceImpl = TokenDataSourceImpl(dataStore)
 
     @Singleton
     @Provides
-    fun provideAuthDataSource(dataStore: DataStore<Preferences>): AuthDataSource = AuthDataSource(dataStore)
+    fun provideAuthDataSource(dataStore: DataStore<Preferences>): AuthDataSourceImpl = AuthDataSourceImpl(dataStore)
 }

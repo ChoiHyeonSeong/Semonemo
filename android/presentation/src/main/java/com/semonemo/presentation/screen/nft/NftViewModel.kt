@@ -1,12 +1,14 @@
-package com.semonemo.presentation.screen.login
+package com.semonemo.presentation.screen.nft
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.semonemo.domain.datasource.AuthDataSource
 import com.semonemo.domain.model.Transaction
 import com.semonemo.domain.repository.NFTRepository
 import com.semonemo.domain.request.TransferRequest
+import com.semonemo.presentation.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.metamask.androidsdk.Dapp
 import io.metamask.androidsdk.ErrorType
@@ -16,7 +18,9 @@ import io.metamask.androidsdk.EthereumRequest
 import io.metamask.androidsdk.EthereumState
 import io.metamask.androidsdk.RequestError
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,18 +42,31 @@ class NftViewModel
         private val ethereum: Ethereum,
         private val dApp: Dapp,
         private val nftRepository: NFTRepository,
+        private val authDataSource: AuthDataSource,
     ) : ViewModel() {
         private val web3j =
             Web3j.build(HttpService("https://rpc.ssafy-blockchain.com"))
         private val walletAddress = mutableStateOf("")
         private val transactionState =
             MutableStateFlow<Transaction>(Transaction("", "", "", "", "", ""))
+        private val _nftEvent = MutableSharedFlow<NftEvent>()
+        val nftEvent = _nftEvent.asSharedFlow()
         val ethereumState =
             MediatorLiveData<EthereumState>().apply {
                 addSource(ethereum.ethereumState) { newEthereumState ->
                     value = newEthereumState
                 }
             }
+
+        init {
+            loadWalletAddress()
+        }
+
+        private fun loadWalletAddress() {
+            viewModelScope.launch {
+                walletAddress.value = authDataSource.getWalletAddress().toString()
+            }
+        }
 
         fun connect(callback: ((String) -> Unit)) {
             ethereum.connect(dApp) { result ->
@@ -144,12 +161,12 @@ class NftViewModel
             }
         }
 
-        fun sendTransaction() {
+        fun sendTransaction(data: String) {
             val params: MutableMap<String, Any> =
                 mutableMapOf(
-                    "from" to transactionState.value.from,
-                    "to" to transactionState.value.to,
-                    "data" to transactionState.value.data,
+                    "from" to walletAddress.value,
+                    "to" to BuildConfig.CONTRACT_ADDRESS,
+                    "data" to data,
                 )
 
             val transactionRequest =

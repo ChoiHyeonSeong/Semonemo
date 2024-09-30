@@ -2,11 +2,11 @@ package com.semonemo.data.di
 
 import com.google.gson.GsonBuilder
 import com.semonemo.data.BuildConfig
-import com.semonemo.data.datasource.TokenDataSource
 import com.semonemo.data.network.api.AuthApi
 import com.semonemo.data.network.interceptor.AccessTokenInterceptor
 import com.semonemo.data.network.interceptor.ErrorHandlingInterceptor
 import com.semonemo.data.network.interceptor.JwtAuthenticator
+import com.semonemo.domain.datasource.TokenDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

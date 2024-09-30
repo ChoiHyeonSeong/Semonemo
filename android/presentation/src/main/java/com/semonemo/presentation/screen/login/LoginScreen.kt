@@ -40,6 +40,7 @@ import com.semonemo.presentation.component.CustomDialog
 import com.semonemo.presentation.component.CustomPasswordTextField
 import com.semonemo.presentation.component.LongBlackButton
 import com.semonemo.presentation.component.LongWhiteButton
+import com.semonemo.presentation.screen.nft.NftViewModel
 import com.semonemo.presentation.theme.Gray03
 import com.semonemo.presentation.theme.Main01
 import com.semonemo.presentation.theme.Main02

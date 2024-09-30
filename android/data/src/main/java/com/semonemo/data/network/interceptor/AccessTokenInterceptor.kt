@@ -1,6 +1,6 @@
 package com.semonemo.data.network.interceptor
 
-import com.semonemo.data.datasource.TokenDataSource
+import com.semonemo.domain.datasource.TokenDataSource
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response

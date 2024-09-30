@@ -4,64 +4,65 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.semonemo.domain.datasource.AuthDataSource
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AuthDataSource
+class AuthDataSourceImpl
     @Inject
     constructor(
         private val dataStore: DataStore<Preferences>,
-    ) {
-        suspend fun saveWalletAddress(address: String) {
+    ) : AuthDataSource {
+        override suspend fun saveWalletAddress(address: String) {
             dataStore.edit { prefs ->
                 prefs[WALLET_ADDRESS_KEY] = address
             }
         }
 
-        suspend fun getWalletAddress(): String? =
+        override suspend fun getWalletAddress(): String? =
             dataStore.data
                 .map { prefs ->
                     prefs[WALLET_ADDRESS_KEY]
                 }.first()
 
-        suspend fun savePassword(password: String) {
+        override suspend fun savePassword(password: String) {
             dataStore.edit { prefs ->
                 prefs[PASSWORD_KEY] = password
             }
         }
 
-        suspend fun getPassword(): String? =
+        override suspend fun getPassword(): String? =
             dataStore.data
                 .map { prefs ->
                     prefs[PASSWORD_KEY]
                 }.first()
 
-        suspend fun saveNickname(nickname: String) {
+        override suspend fun saveNickname(nickname: String) {
             dataStore.edit { prefs ->
                 prefs[NICKNAME_KEY] = nickname
             }
         }
 
-        suspend fun getNickname(): String? =
+        override suspend fun getNickname(): String? =
             dataStore.data
                 .map { prefs ->
                     prefs[NICKNAME_KEY]
                 }.first()
 
-        suspend fun saveProfileImage(profileImage: String) {
+        override suspend fun saveProfileImage(profileImage: String) {
             dataStore.edit { prefs ->
                 prefs[PROFILE_IMAGE_KEY] = profileImage
             }
         }
 
-        suspend fun getProfileImage(): String? =
+        override suspend fun getProfileImage(): String? =
             dataStore.data
                 .map { prefs ->
                     prefs[PROFILE_IMAGE_KEY]
                 }.first()
 
-        suspend fun deleteAuthData() {
+        override suspend fun deleteAuthData() {
             dataStore.edit { prefs ->
                 prefs.remove(WALLET_ADDRESS_KEY)
                 prefs.remove(PASSWORD_KEY)
@@ -70,13 +71,13 @@ class AuthDataSource
             }
         }
 
-        suspend fun saveUserId(userId: Long) {
+        override suspend fun saveUserId(userId: Long) {
             dataStore.edit { prefs ->
                 prefs[USER_ID_KEY] = userId.toString()
             }
         }
 
-        suspend fun getUserId(): String? =
+        override suspend fun getUserId(): String? =
             dataStore.data
                 .map { prefs ->
                     prefs[USER_ID_KEY]

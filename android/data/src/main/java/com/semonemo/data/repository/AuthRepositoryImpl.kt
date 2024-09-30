@@ -1,11 +1,11 @@
 package com.semonemo.data.repository
 
 import com.google.gson.Gson
-import com.semonemo.data.datasource.AuthDataSource
-import com.semonemo.data.datasource.TokenDataSource
 import com.semonemo.data.network.api.AuthApi
 import com.semonemo.data.network.response.emitApiResponse
 import com.semonemo.data.util.toMultiPart
+import com.semonemo.domain.datasource.AuthDataSource
+import com.semonemo.domain.datasource.TokenDataSource
 import com.semonemo.domain.model.ApiResponse
 import com.semonemo.domain.model.JwtToken
 import com.semonemo.domain.repository.AuthRepository
